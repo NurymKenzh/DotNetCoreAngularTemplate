@@ -30,7 +30,7 @@
             The field is mandatory.
           </label>
           <label class="text-danger"
-                 *ngIf="userService.formRegisterModel.get('Passwords.Password').touched && userService.formRegisterModel.get('Passwords.Password').errors?.passwordMismatch">
+                 *ngIf="userService.formRegisterModel.get('Passwords.ConfirmPassword').touched && userService.formRegisterModel.get('Passwords.ConfirmPassword').errors?.passwordMismatch">
             Confirm password does not match.
           </label>
         </div>

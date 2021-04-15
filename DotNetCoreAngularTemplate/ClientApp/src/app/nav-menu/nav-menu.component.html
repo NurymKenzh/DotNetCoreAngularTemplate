@@ -20,9 +20,19 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li *ngIf="!userService.authorizedUser()" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/users/register']">
               Register
+            </a>
+          </li>
+          <li *ngIf="!userService.authorizedUser()" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/users/login']">
+              Log in
+            </a>
+          </li>
+          <li *ngIf="userService.authorizedUser()" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/']" (click)="userService.logout()">
+              Log out
             </a>
           </li>
         </ul>

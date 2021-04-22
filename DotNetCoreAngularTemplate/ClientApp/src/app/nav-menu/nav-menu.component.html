@@ -30,6 +30,9 @@
               Log in
             </a>
           </li>
+          <li *ngIf="userService.authorizedUser() && authorizedUser" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/']">{{authorizedUser.Email}}</a>
+          </li>
           <li *ngIf="userService.authorizedUser()" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/']" (click)="userService.logout()">
               Log out

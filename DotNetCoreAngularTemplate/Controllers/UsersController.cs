@@ -1,4 +1,5 @@
 ﻿using DotNetCoreAngularTemplate.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -78,7 +79,7 @@ namespace DotNetCoreAngularTemplate.Controllers
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("Id", user.Id.ToString()),
-                    new Claim("Email", user.Email)
+                        new Claim("Email", user.Email)
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Configuration["JWTkey"].ToString())),
@@ -93,6 +94,20 @@ namespace DotNetCoreAngularTemplate.Controllers
             {
                 return BadRequest(new { message = "Invalid login attempt." });
             }
+        }
+
+        // GET: api/Users/GetAuthorizedUserInfo
+        [HttpGet]
+        [Authorize]
+        [Route("GetAuthorizedUserInfo")]
+        public async Task<Object> GetAuthorizedUserInfo()
+        {
+            string userId = User.Claims.First(c => c.Type == "Id").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            return new
+            {
+                user.Email
+            };
         }
     }
 }

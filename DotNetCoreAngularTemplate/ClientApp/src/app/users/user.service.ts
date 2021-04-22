@@ -1,7 +1,8 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { Router } from "@angular/router";
 export class UserService {
   baseUrl: string;
   apiUrl = 'api/Users/';
+  authorizedUser$: Subject<AuthorizedUser> = new Subject<AuthorizedUser>();
 
   constructor(private formBuilder: FormBuilder,
     private httpClient: HttpClient,
@@ -40,20 +42,42 @@ export class UserService {
   }
 
   login(user) {
+    this.authorizedUser$.next({
+      Email: ''
+    });
     this.httpClient.post(this.baseUrl + this.apiUrl + 'Login', user).subscribe(
       (res: any) => {
+        this.authorizedUser$.next({
+          Email: JSON.parse(window.atob((res.token.split('.')[1]))).Email
+        });
         localStorage.setItem('token', res.token);
         this.router.navigateByUrl('/');
       });
   }
 
   logout() {
+    this.authorizedUser$.next(undefined);
     localStorage.removeItem('token');
     this.router.navigateByUrl('/');
   }
 
   authorizedUser() {
     return localStorage.getItem('token') != null;
+  }
+
+  getAuthorizedUserInfo() {
+    //const token = new HttpHeaders({ 'Authorization': 'Bearer ' + localStorage.getItem('token') });
+    //return this.httpClient.get(this.baseUrl + this.apiUrl + 'GetAuthorizedUserInfo', { headers: token });
+    return this.httpClient.get(this.baseUrl + this.apiUrl + 'GetAuthorizedUserInfo');
+  }
+
+  getAuthorizedUserEmail() {
+    if (localStorage.getItem('token')) {
+      return JSON.parse(window.atob(localStorage.getItem('token'.split('.')[1]))).Email;
+    }
+    else {
+      return '';
+    }
   }
 
   comparePasswords(formBuilder: FormGroup) {
@@ -67,4 +91,8 @@ export class UserService {
       }
     }
   }
+}
+
+export interface AuthorizedUser {
+  Email: string;
 }

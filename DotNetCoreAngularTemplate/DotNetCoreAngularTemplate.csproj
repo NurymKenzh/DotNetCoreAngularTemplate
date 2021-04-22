@@ -31,12 +31,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\authorize\authorize.interceptor.ts" />
     <None Remove="ClientApp\src\app\users\login.component.ts" />
     <None Remove="ClientApp\src\app\users\register.component.ts" />
     <None Remove="ClientApp\src\app\users\user.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\authorize\authorize.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\users\login.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\users\register.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\users\user.service.ts" />

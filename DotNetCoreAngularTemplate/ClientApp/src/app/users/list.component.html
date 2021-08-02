@@ -1,0 +1,28 @@
+<mat-form-field>
+  <input matInput type="text" (keyup)="filter($event.target.value)" placeholder="Filter" />
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" matSort class="table">
+  <tr>
+    <ng-container matColumnDef="Email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Email
+      </th>
+      <td mat-cell *matCellDef="let item">
+        {{item.Email}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Roles">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Roles
+      </th>
+      <td mat-cell *matCellDef="let item">
+        {{item.Roles}}
+      </td>
+    </ng-container>
+  </tr>
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>
+
+<mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="100" showFirstLastButtons></mat-paginator>

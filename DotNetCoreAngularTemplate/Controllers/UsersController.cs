@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,13 @@ namespace DotNetCoreAngularTemplate.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public UsersController(UserManager<ApplicationUser> userManager)
+        public UsersController(UserManager<ApplicationUser> userManager,
+            ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
+            _context = applicationDbContext;
         }
 
         public class ApplicationUserRegisterModel
@@ -113,6 +117,32 @@ namespace DotNetCoreAngularTemplate.Controllers
             {
                 user.Email
             };
+        }
+
+        public class ApplicationUserViewModel
+        {
+            public string Id { get; set; }
+            public string Email { get; set; }
+            public string[] Roles { get; set; }
+        }
+
+        // GET: api/Users
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<IEnumerable<ApplicationUserViewModel>>> Users()
+        {
+            List<ApplicationUserViewModel> applicationUserViewModels = new List<ApplicationUserViewModel>();
+            List<ApplicationUser> applicationUsers = await _context.Users.ToListAsync();
+            foreach(ApplicationUser applicationUser in applicationUsers)
+            {
+                applicationUserViewModels.Add(new ApplicationUserViewModel()
+                {
+                    Id = applicationUser.Id,
+                    Email = applicationUser.Email,
+                    Roles = _userManager.GetRolesAsync(applicationUser).Result.ToArray()
+                });
+            }
+            return applicationUserViewModels;
         }
     }
 }

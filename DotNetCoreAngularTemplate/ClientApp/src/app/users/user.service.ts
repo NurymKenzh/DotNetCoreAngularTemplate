@@ -82,7 +82,7 @@ export class UserService {
 
   getAuthorizedUserEmail() {
     if (localStorage.getItem('token')) {
-      return JSON.parse(window.atob(localStorage.getItem('token'.split('.')[1]))).Email;
+      return JSON.parse(window.atob(localStorage.getItem('token').split('.')[1])).Email;
     }
     else {
       return '';

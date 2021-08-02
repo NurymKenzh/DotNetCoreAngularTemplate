@@ -1,3 +1,7 @@
+<a class="btn" [routerLink]="['/users/register']" matTooltip="Register">
+  <i class="material-icons">add</i>
+</a>
+
 <mat-form-field>
   <input matInput type="text" (keyup)="filter($event.target.value)" placeholder="Filter" />
 </mat-form-field>
@@ -18,6 +22,20 @@
       </th>
       <td mat-cell *matCellDef="let item">
         {{item.Roles}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="details-edit-delete">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let item">
+        <a class="btn" [routerLink]="['/users', item.Id]" matTooltip="Details">
+          <i class="material-icons">info</i>
+        </a>
+        <a class="btn" [routerLink]="['/users/edit', item.Id]" matTooltip="Edit">
+          <i class="material-icons">edit</i>
+        </a>
+        <a class="btn" matTooltip="Delete" (click)="delete(item.Id)">
+          <i class="material-icons">delete</i>
+        </a>
       </td>
     </ng-container>
   </tr>

@@ -144,5 +144,96 @@ namespace DotNetCoreAngularTemplate.Controllers
             }
             return applicationUserViewModels;
         }
+
+        // GET: api/Users/5
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<ApplicationUserViewModel>> GetUser(string id)
+        {
+            var applicationUser = await _context.Users.FindAsync(id);
+            if(applicationUser == null)
+            {
+                return NotFound();
+            }
+
+            ApplicationUserViewModel applicationUserViewModel = new ApplicationUserViewModel()
+            {
+                Id = applicationUser.Id,
+                Email = applicationUser.Email,
+                Roles = _userManager.GetRolesAsync(applicationUser).Result.ToArray()
+            };
+
+            return applicationUserViewModel;
+        }
+
+        // DELETE: api/Users/5
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<ApplicationUserViewModel>> DeleteUser(string id)
+        {
+            var applicationUser = await _context.Users.FindAsync(id);
+            if (applicationUser == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(applicationUser);
+            await _context.SaveChangesAsync();
+
+            return new ApplicationUserViewModel()
+            {
+                Id = applicationUser.Id,
+                Email = applicationUser.Email,
+                Roles = _userManager.GetRolesAsync(applicationUser).Result.ToArray()
+            };
+        }
+
+        // PUT: api/Users/5
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> PutUser(string id, ApplicationUserViewModel model)
+        {
+            if(id!=model.Id)
+            {
+                return BadRequest();
+            }
+
+            var applicationUser = await _context.Users.FindAsync(id);
+            if (applicationUser == null)
+            {
+                return NotFound();
+            }
+            _context.Entry(applicationUser).State = EntityState.Modified;
+
+            try
+            {
+                var userRoles = await _userManager.GetRolesAsync(applicationUser);
+                await _userManager.RemoveFromRolesAsync(applicationUser, userRoles.ToArray());
+                await _userManager.AddToRolesAsync(applicationUser, model.Roles);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                if(applicationUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // GET: api/Users/GetRoles
+        [HttpGet]
+        [Route("GetRoles")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<IEnumerable<IdentityRole>>> GetRoles()
+        {
+            return await _context.Roles.ToListAsync();
+        }
     }
 }

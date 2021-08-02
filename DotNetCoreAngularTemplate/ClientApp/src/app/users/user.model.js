@@ -1,10 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Role = exports.User = void 0;
 var User = /** @class */ (function () {
     function User() {
     }
     return User;
 }());
 exports.User = User;
-//# sourceMappingURL=usser.model.js.map
+var Role = /** @class */ (function () {
+    function Role() {
+    }
+    return Role;
+}());
+exports.Role = Role;
+//# sourceMappingURL=user.model.js.map

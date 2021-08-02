@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-title>
+    User details
+  </mat-card-title>
+  <mat-card-content>
+    <dl>
+      <dt>User email</dt>
+      <dd>{{user?.Email}}</dd>
+      <dt>User roles</dt>
+      <dd>{{user?.Roles}}</dd>
+    </dl>
+  </mat-card-content>
+  <mat-card-actions>
+    <a class="btn" [routerLink]="['/users']" matTooltip="Back">
+      <i class="material-icons">arrow_back</i>
+    </a>
+  </mat-card-actions>
+</mat-card>

@@ -119,6 +119,18 @@ export class UserService {
     }
     return match;
   }
+
+  delete(Id) {
+    return this.httpClient.delete(this.baseUrl + this.apiUrl + Id);
+  }
+
+  put(user) {
+    return this.httpClient.put(this.baseUrl + this.apiUrl + user.Id, user);
+  }
+
+  public getRoles() {
+    return this.httpClient.get(this.baseUrl + this.apiUrl + 'GetRoles');
+  }
 }
 
 export interface AuthorizedUser {

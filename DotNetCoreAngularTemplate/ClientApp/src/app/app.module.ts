@@ -31,6 +31,8 @@ import { RegisterComponent } from './users/register.component';
 import { LoginComponent } from './users/login.component';
 import { UsersIndexComponent } from './users/index.component';
 import { UsersListComponent } from './users/list.component';
+import { UserDetailsComponent } from './users/details.component';
+import { UserEditComponent } from './users/edit.component';
 
 import { AdministrationComponent } from './administration/administration.component';
 
@@ -45,6 +47,8 @@ import { AdministrationComponent } from './administration/administration.compone
     LoginComponent,
     UsersIndexComponent,
     UsersListComponent,
+    UserDetailsComponent,
+    UserEditComponent,
     AdministrationComponent
   ],
   imports: [
@@ -58,6 +62,8 @@ import { AdministrationComponent } from './administration/administration.compone
       { path: 'users', component: UsersIndexComponent, canActivate: [AuthorizeGuard], data: { allowedRoles: ['Administrator'] } },
       { path: 'users/register', component:  RegisterComponent},
       { path: 'users/login', component: LoginComponent },
+      { path: 'users/:id', component: UserDetailsComponent, canActivate: [AuthorizeGuard], data: { allowedRoles: ['Administrator'] }  },
+      { path: 'users/edit/:id', component: UserEditComponent, canActivate: [AuthorizeGuard], data: { allowedRoles: ['Administrator'] }  },
       { path: 'administration', component: AdministrationComponent, canActivate: [AuthorizeGuard], data: { allowedRoles: ['Administrator'] } }
     ]),
     ReactiveFormsModule,

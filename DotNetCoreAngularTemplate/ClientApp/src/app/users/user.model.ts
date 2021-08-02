@@ -3,3 +3,8 @@ export class User {
   Email: string;
   Roles: string[];
 }
+
+export class Role {
+  Id: string;
+  Name: string;
+}

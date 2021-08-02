@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-title>
+    Edit user
+  </mat-card-title>
+  <form [formGroup]="userForm" autocomplete="off" novalidate (ngSubmit)="save(userForm.getRawValue())">
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Email" formControlName="Email" id="email" />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <input matInput type="text" placeholder="Roles" formControlName="Roles" id="roles" hidden="hidden" />
+        <mat-selection-list #RolesSelected formControlName="RolesSelected">
+          <mat-list-option *ngFor="let role of selectedRoles" [value]="role.Name" [selected]="role.Selected">
+            {{role.Name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="center">
+      <button mat-raised-button color="primary" [disabled]="!userForm.valid">
+        Save
+      </button>
+      <button type="button" mat-raised-button color="warn" (click)="cancel()">
+        Cancel
+      </button>
+    </mat-card-actions>
+  </form>
+</mat-card>

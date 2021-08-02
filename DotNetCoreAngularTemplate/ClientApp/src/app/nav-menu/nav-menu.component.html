@@ -20,6 +20,11 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
+          <li *ngIf="userService.authorizedUser() && userService.allowedRole(['Administrator'])" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/administration']">
+              Administration
+            </a>
+          </li>
           <li *ngIf="!userService.authorizedUser()" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/users/register']">
               Register

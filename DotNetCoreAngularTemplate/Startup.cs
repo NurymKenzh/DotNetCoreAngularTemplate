@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DotNetCoreAngularTemplate
 {
@@ -53,7 +54,8 @@ namespace DotNetCoreAngularTemplate
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(x => {
+                .AddJwtBearer(x =>
+                {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = false;
                     x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -71,7 +73,9 @@ namespace DotNetCoreAngularTemplate
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -119,6 +123,35 @@ namespace DotNetCoreAngularTemplate
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            CreateRoles(serviceProvider).Wait();
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            string[] roleNames = { "Administrator", "Moderator" };
+            IdentityResult roleResult;
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+            ApplicationUser userAdmin = await userManager.Users.FirstOrDefaultAsync(u => u.Email == "admin@nurym.com");
+            if (userAdmin != null)
+            {
+                await userManager.AddToRoleAsync(userAdmin, "Administrator");
+                await userManager.AddToRoleAsync(userAdmin, "Moderator");
+            }
+            ApplicationUser userModerator = await userManager.Users.FirstOrDefaultAsync(u => u.Email == "moderator@nurym.com");
+            if (userModerator != null)
+            {
+                await userManager.AddToRoleAsync(userModerator, "Moderator");
+            }
         }
     }
 }

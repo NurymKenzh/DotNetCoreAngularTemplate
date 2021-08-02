@@ -31,6 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\administration\administration.component.ts" />
+    <None Remove="ClientApp\src\app\authorize\authorize.guard.ts" />
     <None Remove="ClientApp\src\app\authorize\authorize.interceptor.ts" />
     <None Remove="ClientApp\src\app\users\login.component.ts" />
     <None Remove="ClientApp\src\app\users\register.component.ts" />
@@ -38,6 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\administration\administration.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\authorize\authorize.guard.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\authorize\authorize.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\users\login.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\users\register.component.ts" />
